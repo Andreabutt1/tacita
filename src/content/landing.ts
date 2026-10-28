@@ -26,6 +26,7 @@ export interface LandingContent {
   heroBullets: { title: string; text: string }[];
   trades?: { label: string; items: string[] };
   problem: { title: string; subtitle: string; points: Stat[] };
+  video: { pill: string; title: string; text: string; cardLabel: string; cardText: string };
   dossier: { eyebrow: string; title: string; points: string[] };
   memory: { eyebrow: string; title: string; points: string[] };
   founding: { pill: string; title: string; subtitle: string; badge: string };
@@ -49,26 +50,17 @@ export const navLinks = [
 export const steps = [
   {
     title: "Erstgespräch",
-    text: "20 Minuten: Wir klären, welches Wissen gesichert werden muss, bis wann, und wer es später braucht.",
-    mobileText: "20 Minuten: Welches Wissen, bis wann, für wen.",
-    rows: [{ label: "Termin", value: "Di, 10:30", mark: "done" }],
+    text: "20 Minuten am Telefon: Wir klären, welches Wissen gesichert werden muss, bis wann, und wer es später braucht.",
   },
   {
     title: "Telefon-Interviews",
-    text: "8–15 Anrufe à 15 Minuten, wann es Ihnen passt, auch im Auto. Wir fragen nach echten Fällen.",
-    mobileText: "8–15 Anrufe à 15 Minuten, wann es Ihnen passt.",
-    rows: [
-      { label: "Gespräch 3", value: "Lieferanten", mark: "done" },
-      { label: "Gespräch 4", value: "Stammkunden", mark: "live" },
-    ],
+    text: "8–15 Anrufe à 15 Minuten, wann es Ihnen passt, auch im Auto. Wir fragen nach echten Fällen, nicht nach Theorie.",
   },
   {
     title: "Dossier & Archiv",
     text: "Sie bekommen ein Übergabe-Dossier und ein durchsuchbares Archiv. Ihre Nachfolge fragt das Archiv statt Sie.",
-    mobileText: "Übergabe-Dossier und durchsuchbares Archiv für Ihre Nachfolge.",
-    rows: [{ label: "Übergabe-Dossier.pdf", value: "42 Seiten", mark: "none" }],
   },
-] as const;
+];
 
 export const audiences = [
   {
@@ -176,6 +168,13 @@ export const content: LandingContent = {
       },
       { stat: "2 von 3", text: "Inhaber:innen sagen: Eine Nachfolge zu finden ist schwierig.", source: "IHK-Studie 2025" },
     ],
+  },
+  video: {
+    pill: "So einfach ist das",
+    title: "Ein Anruf. 15 Minuten. Auch auf der Baustelle.",
+    text: "Kein Termin im Büro, keine App, kein Formular. Wir rufen an, wann es Ihnen passt, und fragen nach echten Fällen aus Ihrem Alltag.",
+    cardLabel: "Gespräch 3 von 10 · Lieferanten",
+    cardText: "Ins Dossier übernommen",
   },
   dossier: {
     eyebrow: "Für Käufer, Bank & Steuerberatung",
