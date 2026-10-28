@@ -102,11 +102,8 @@
     @apply bg-background text-foreground;
   }
 }
-/* Tacita gradients (Figma: logo dot, glows, dossier card) and the hero voice waveform */
+/* Tacita gradients (Figma: glows, dossier card) and the hero voice waveform */
 @layer components {
-  .tacita-dot {
-    background: radial-gradient(circle at 35% 30%, #fff 0%, #d4f5e8 14%, #a8ebd1 28%, #81d7b9 37%, #5ac3a2 46%, #32ae8a 55%, #0b9a72 64%);
-  }
   .tacita-wave-bar {
     background: linear-gradient(180deg, #4fd1a5 0%, #0b9a72 100%);
     transform-origin: center;

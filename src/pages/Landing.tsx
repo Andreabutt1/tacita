@@ -1,10 +1,12 @@
-import { useEffect, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { Menu } from "lucide-react";
+import { FileText, Menu, Phone, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import siteCallVideo from "@/assets/site-call.mp4";
+import siteCallPoster from "@/assets/site-call-poster.jpg";
 import {
   CALENDLY_URL,
   DEPOSIT_URL,
@@ -20,9 +22,34 @@ import {
 // Without a Calendly link, booking buttons jump to the closing call-to-action.
 const BOOK_HREF = CALENDLY_URL || "#kontakt";
 
+// Logo mark: five voice bars, same idea as the hero waveform. Kept in sync with public/favicon.svg.
+const LogoMark = ({ className }: { className?: string }) => {
+  // The logo renders in header and footer, so each instance needs its own gradient id.
+  const gradientId = useId();
+  return (
+    <svg viewBox="0 0 26 26" className={className} aria-hidden>
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#4fd1a5" />
+          <stop offset="1" stopColor="#0b9a72" />
+        </linearGradient>
+      </defs>
+      {[
+        [1, 9, 8],
+        [6.25, 5, 16],
+        [11.5, 1, 24],
+        [16.75, 6, 14],
+        [22, 8.5, 9],
+      ].map(([x, y, h]) => (
+        <rect key={x} x={x} y={y} width="3" height={h} rx="1.5" fill={`url(#${gradientId})`} />
+      ))}
+    </svg>
+  );
+};
+
 const Logo = ({ small = false }: { small?: boolean }) => (
   <span className="flex items-center gap-2.5">
-    <span className={cn("tacita-dot rounded-full", small ? "size-[22px]" : "size-[26px]")} />
+    <LogoMark className={small ? "size-[22px]" : "size-[26px]"} />
     <span className={cn("font-bold text-foreground", small ? "text-[19px] tracking-[-0.5px]" : "text-[22px] tracking-[-0.6px]")}>
       Tacita
     </span>
@@ -317,14 +344,129 @@ const Hero = ({ v }: { v: LandingContent }) => {
   );
 };
 
-const StepRow = ({ label, value, mark }: { label: string; value: string; mark: "done" | "live" | "none" }) => (
-  <div className="flex items-center justify-between rounded-xl border bg-secondary px-3.5 py-3 text-[13px]">
-    <span className="font-semibold">{label}</span>
-    <span className="text-muted-foreground">{value}</span>
-    {mark === "done" && <Check />}
-    {mark === "live" && <span className="font-bold text-primary">●</span>}
+const VideoBand = ({ v }: { v: LandingContent }) => {
+  const ref = useRef<HTMLVideoElement>(null);
+
+  // Respect reduced motion: show the poster frame instead of a looping video.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) ref.current?.pause();
+  }, []);
+
+  return (
+    <section className="px-5 pt-9 sm:px-10 sm:pt-20 lg:px-16 lg:pt-[104px]">
+      <div className="relative mx-auto aspect-[4/5] max-w-[1312px] overflow-hidden rounded-[20px] bg-foreground sm:aspect-[16/9] sm:rounded-3xl lg:aspect-[21/9]">
+        <video
+          ref={ref}
+          className="absolute inset-0 size-full object-cover object-[62%_center]"
+          src={siteCallVideo}
+          poster={siteCallPoster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/30 to-transparent sm:bg-gradient-to-r sm:from-foreground/85 sm:via-foreground/40" />
+
+        <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:inset-y-0 sm:flex sm:max-w-[560px] sm:flex-col sm:justify-end sm:p-12 lg:justify-center lg:p-16">
+          <span className="inline-flex w-fit rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-semibold backdrop-blur sm:text-[13px]">
+            {v.video.pill}
+          </span>
+          <h2 className="mt-3 text-[28px] font-bold leading-[1.15] tracking-[-0.9px] sm:mt-[18px] sm:text-[40px] sm:tracking-[-1.2px] lg:text-[46px] lg:tracking-[-1.4px]">
+            {v.video.title}
+          </h2>
+          <p className="mt-3 text-[15px] leading-[1.55] text-white/80 sm:mt-4 sm:text-lg">{v.video.text}</p>
+        </div>
+
+        <div className="absolute right-8 top-8 hidden rounded-2xl border bg-card px-4 py-3.5 text-left shadow-[0_12px_16px_rgba(12,26,23,0.08)] md:block lg:right-12 lg:top-12">
+          <p className="flex items-center gap-1.5 pb-1.5 text-xs font-semibold text-primary">
+            <span className="size-[7px] animate-pulse rounded-full bg-primary" />
+            {v.video.cardLabel}
+          </p>
+          <p className="flex items-center gap-2 text-sm text-body">
+            <Check />
+            {v.video.cardText}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Small scenes for the three steps: a booked call, a running interview, the finished dossier.
+const MiniCard = ({ className, children }: { className?: string; children: ReactNode }) => (
+  <div className={cn("w-full max-w-[260px] rounded-xl border bg-card p-4 shadow-[0_8px_16px_rgba(12,26,23,0.06)]", className)}>
+    {children}
   </div>
 );
+
+const SceneCall = () => (
+  <MiniCard>
+    <div className="flex items-center gap-3">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+        <Phone className="size-[18px]" />
+      </span>
+      <div>
+        <p className="text-sm font-semibold">Erstgespräch</p>
+        <p className="text-xs text-muted-foreground">20 Min. · Telefon oder Video</p>
+      </div>
+    </div>
+    <div className="mt-3 flex items-center justify-between rounded-lg bg-secondary px-3 py-2 text-xs">
+      <span className="font-medium">Di, 10:30</span>
+      <span className="flex items-center gap-1 font-semibold text-primary">
+        <Check className="text-[11px]" /> bestätigt
+      </span>
+    </div>
+  </MiniCard>
+);
+
+const SCENE_BARS = WAVE_BARS.filter((_, i) => i % 2 === 0);
+
+const SceneInterview = () => (
+  <MiniCard>
+    <p className="flex items-center gap-1.5 text-xs font-semibold text-primary">
+      <span className="size-[7px] animate-pulse rounded-full bg-primary" />
+      Gespräch 4 von 10 · 07:12
+    </p>
+    <div aria-hidden className="mt-3 flex h-10 items-center gap-[3px]">
+      {SCENE_BARS.map((b, i) => (
+        <span
+          key={i}
+          className="tacita-wave-bar w-[4px] rounded-full"
+          style={{ height: `${b.height}%`, animationDuration: `${b.duration}s`, animationDelay: `${b.delay}s` }}
+        />
+      ))}
+    </div>
+    <p className="mt-3 rounded-lg bg-secondary px-3 py-2 text-xs leading-snug text-body">
+      „Und wen rufen Sie an, wenn die Hebebühne ausfällt?“
+    </p>
+  </MiniCard>
+);
+
+const SceneDossier = () => (
+  <div className="relative w-full max-w-[260px]">
+    <MiniCard className="max-w-none">
+      <div className="flex items-center gap-2">
+        <FileText className="size-[18px] text-primary" />
+        <p className="text-sm font-semibold">Übergabe-Dossier</p>
+        <span className="ml-auto text-xs text-muted-foreground">42 Seiten</span>
+      </div>
+      <div className="mt-3 space-y-1.5">
+        <div className="h-1.5 w-11/12 rounded bg-muted" />
+        <div className="h-1.5 w-8/12 rounded bg-muted" />
+        <div className="h-1.5 w-10/12 rounded bg-muted" />
+        <div className="h-1.5 w-7/12 rounded bg-muted" />
+      </div>
+    </MiniCard>
+    <div className="absolute -bottom-4 -right-2 flex items-center gap-1.5 rounded-full border bg-card py-1.5 pl-2.5 pr-3 text-xs text-body shadow-[0_8px_16px_rgba(12,26,23,0.08)]">
+      <Search className="size-3.5 text-primary" />
+      Lieferant für Bremsen?
+    </div>
+  </div>
+);
+
+const STEP_SCENES = [SceneCall, SceneInterview, SceneDossier];
 
 const Faq = ({ items }: { items: LandingContent["faq"] }) => (
   <AccordionPrimitive.Root type="single" collapsible defaultValue={items[0].q} className="mx-auto flex max-w-[860px] flex-col gap-3">
@@ -393,27 +535,36 @@ const Landing = () => {
           </div>
         </Section>
 
+        <VideoBand v={v} />
+
         <Section id="ablauf">
           <SectionHeader pill="So funktioniert’s" title="In drei Schritten zur sicheren Übergabe" />
-          <div className="mt-6 grid gap-3 sm:mt-14 sm:gap-5 md:grid-cols-3">
-            {steps.map((s, i) => (
-              <Card key={s.title} className="flex gap-3.5 md:min-h-[360px] md:flex-col md:gap-0">
-                <span className="flex h-[30px] w-9 shrink-0 items-center justify-center rounded-lg border bg-secondary text-xs font-semibold md:mb-7 md:h-auto md:w-fit md:px-2.5 md:py-1.5 md:text-[13px]">
-                  0{i + 1}
-                </span>
-                <div className="md:flex md:flex-1 md:flex-col">
-                  <h3 className="text-lg font-semibold tracking-[-0.2px] md:pb-2.5 md:text-[21px] md:tracking-[-0.3px]">{s.title}</h3>
-                  <p className="pt-1.5 text-sm leading-[1.5] text-muted-foreground md:hidden">{s.mobileText}</p>
-                  <p className="hidden text-base leading-[1.55] text-muted-foreground md:block">{s.text}</p>
-                  <div className="mt-auto hidden flex-col gap-2 pt-7 md:flex">
-                    {s.rows.map((r) => (
-                      <StepRow key={r.label} {...r} />
-                    ))}
+          <ol className="mt-8 grid gap-10 sm:mt-14 md:grid-cols-3 md:gap-0">
+            {steps.map((s, i) => {
+              const Scene = STEP_SCENES[i];
+              return (
+                <li key={s.title} className="flex flex-col">
+                  <div className="order-last mt-5 flex h-[190px] items-center justify-center rounded-2xl border bg-secondary px-5 md:order-first md:mr-8 md:mt-0 md:h-[220px]">
+                    <Scene />
                   </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+                  {/* Step node; on desktop a line runs through all three nodes. */}
+                  <div
+                    className={cn(
+                      "relative mt-0 md:mt-7 md:before:absolute md:before:inset-x-0 md:before:top-1/2 md:before:h-px md:before:bg-border",
+                      i === 0 && "md:before:left-[18px]",
+                      i === steps.length - 1 && "md:before:right-auto md:before:w-[18px]",
+                    )}
+                  >
+                    <span className="relative z-10 flex size-9 items-center justify-center rounded-full border-2 border-primary bg-background text-[13px] font-bold text-primary">
+                      0{i + 1}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 text-[21px] font-semibold tracking-[-0.3px] md:mr-8">{s.title}</h3>
+                  <p className="mt-2 text-base leading-[1.55] text-muted-foreground md:mr-8">{s.text}</p>
+                </li>
+              );
+            })}
+          </ol>
           <div className="mt-11 hidden justify-center md:flex">
             <Button asChild variant="ink" size="xl">
               <a href={BOOK_HREF}>Erstgespräch buchen</a>
