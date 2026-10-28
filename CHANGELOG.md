@@ -4,6 +4,17 @@ Overview of user-facing changes.
 
 ---
 
+## 2026-10-28
+
+### Tacita landing page
+- New German landing page „Betrieb übergeben. Wissen behalten.“ for owners before a hand-over, built from the Figma design
+- Hero with an animated voice waveform, interview cards and an email field that leads to booking the Erstgespräch
+- Sections: problem with sourced numbers, three steps, dossier and company memory, audiences with prices, privacy, offer to reserve a place (490 € refundable deposit), FAQ, closing call to action
+- Mobile layout with menu and a sticky „Platz sichern“ button
+- Booking, deposit and sample-dossier links configurable via environment variables
+
+---
+
 ## 2026-08-20
 
 ### Third-party branding fully removed
