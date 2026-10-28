@@ -9,6 +9,9 @@ Overview of user-facing changes.
 ### Tacita landing page
 - New German landing page „Betrieb übergeben. Wissen behalten.“ for owners before a hand-over, built from the Figma design
 - Hero with an animated voice waveform, interview cards and an email field that leads to booking the Erstgespräch
+- Logo mark and favicon made of voice bars, matching the waveform
+- Video band after the problem section: an owner on the phone on a construction site, with the message that an interview is just one call
+- „So funktioniert's“ as a connected three-step flow, each step with a small scene (booked call, running interview, finished dossier)
 - Sections: problem with sourced numbers, three steps, dossier and company memory, audiences with prices, privacy, offer to reserve a place (490 € refundable deposit), FAQ, closing call to action
 - Mobile layout with menu and a sticky „Platz sichern“ button
 - Booking, deposit and sample-dossier links configurable via environment variables
