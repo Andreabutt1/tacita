@@ -6,35 +6,36 @@
 
 @layer base {
   :root {
+    /* Tacita tokens, taken from the Figma landing page */
     --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
+    --foreground: 167 37% 7%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --card-foreground: 167 37% 7%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
+    --popover-foreground: 167 37% 7%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 163 87% 32%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 150 22% 96%;
+    --secondary-foreground: 167 37% 7%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 150 22% 96%;
+    --muted-foreground: 156 8% 37%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 156 53% 93%;
+    --accent-foreground: 163 87% 32%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 153 21% 90%;
+    --input: 153 21% 90%;
+    --ring: 163 87% 32%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,4 +101,33 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+/* Tacita gradients (Figma: logo dot, glows, dossier card) and the hero voice waveform */
+@layer components {
+  .tacita-dot {
+    background: radial-gradient(circle at 35% 30%, #fff 0%, #d4f5e8 14%, #a8ebd1 28%, #81d7b9 37%, #5ac3a2 46%, #32ae8a 55%, #0b9a72 64%);
+  }
+  .tacita-wave-bar {
+    background: linear-gradient(180deg, #4fd1a5 0%, #0b9a72 100%);
+    transform-origin: center;
+    animation: tacita-wave 1s ease-in-out infinite alternate;
+  }
+  .tacita-glow {
+    background: radial-gradient(circle, var(--glow, rgba(79, 209, 165, 0.3)) 0%, transparent 62%);
+  }
+  .tacita-dossier {
+    background: radial-gradient(130% 170% at 85% 0%, #4fd1a5 0%, #2db68c 22%, #1ca87f 34%, #0b9a72 45%, #06684d 100%);
+  }
+  .tacita-ring {
+    background: linear-gradient(150deg, #4fd1a5 0%, #0b9a72 50%, #a8ebd1 100%);
+  }
+}
+
+@keyframes tacita-wave {
+  from { transform: scaleY(0.35); }
+  to { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tacita-wave-bar { animation: none; }
 }
