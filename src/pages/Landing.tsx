@@ -10,7 +10,7 @@ import siteCallPoster from "@/assets/site-call-poster.jpg";
 import {
   CALENDLY_URL,
   DEPOSIT_URL,
-  audiences,
+  handoverCases,
   foundingIncludes,
   navLinks,
   steps,
@@ -315,30 +315,24 @@ const Hero = ({ v }: { v: LandingContent }) => {
           <EmailBooking placeholder={v.emailPlaceholder} />
         </div>
 
-        <ul className="mt-8 hidden w-full max-w-[1000px] text-left md:flex">
-          {v.heroBullets.map((b, i) => (
-            <li key={b.title} className={cn("flex-1 px-7", i > 0 && "border-l")}>
-              <p className="flex items-center gap-2 text-[15px] font-semibold">
-                <Check />
-                {b.title}
-              </p>
-              <p className="pl-[22px] pt-1 text-sm text-muted-foreground">{b.text}</p>
+        <ul className="mt-5 hidden flex-wrap justify-center gap-x-7 gap-y-2 text-sm text-muted-foreground md:flex">
+          {v.heroProof.map((p) => (
+            <li key={p} className="flex items-center gap-1.5">
+              <Check className="text-[13px]" />
+              {p}
             </li>
           ))}
         </ul>
       </div>
 
       {v.trades && (
-        <div className="relative mt-14 hidden flex-col items-center gap-9 md:flex">
-          <p className="text-[13px] text-subtle">{v.trades.label}</p>
-          <ul className="flex flex-wrap justify-center gap-x-12 gap-y-3">
-            {v.trades.items.map((t) => (
-              <li key={t} className="text-base font-semibold tracking-[-0.2px] text-faint">
-                {t}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul className="relative mt-16 hidden flex-wrap justify-center gap-x-8 gap-y-2 md:flex">
+          {v.trades.map((t) => (
+            <li key={t} className="text-xs font-medium uppercase tracking-[0.14em] text-faint">
+              {t}
+            </li>
+          ))}
+        </ul>
       )}
     </section>
   );
@@ -611,16 +605,15 @@ const Landing = () => {
         </Section>
 
         <Section id="fuer-wen">
-          <SectionHeader pill="Für wen" title="Für jeden geplanten Abschied" />
+          <SectionHeader pill="Für wen" title="Für jede Art der Übergabe" />
           <div className="mt-6 grid gap-3 sm:mt-14 sm:gap-5 md:grid-cols-3">
-            {audiences.map((a) => (
+            {handoverCases.map((a) => (
               <Card key={a.title} className="flex flex-col">
                 <p className="text-[13px] font-semibold text-primary">{a.eyebrow}</p>
                 <h3 className="pt-3.5 text-2xl font-bold tracking-[-0.5px]">{a.title}</h3>
                 <p className="flex-1 pt-3 text-base leading-[1.55] text-muted-foreground">{a.text}</p>
                 <p className="mt-7 border-t pt-5 text-[15px] text-muted-foreground">
-                  {a.prefix && `${a.prefix} `}
-                  <span className="text-[22px] font-bold tracking-[-0.4px] text-foreground">{a.price}</span> {a.unit}
+                  <span className="font-semibold text-foreground">Im Dossier:</span> {a.focus}
                 </p>
               </Card>
             ))}
@@ -651,12 +644,15 @@ const Landing = () => {
                   <span className="inline-flex rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold text-primary sm:px-3 sm:text-xs">
                     {v.founding.badge}
                   </span>
-                  <p className="mt-3 font-bold tracking-[-1.8px] sm:mt-[18px] sm:tracking-[-2.5px]">
-                    <span className="text-[46px] leading-none sm:text-[64px]">490 €</span>{" "}
-                    <span className="ml-1 text-sm font-medium tracking-normal text-muted-foreground sm:text-[17px]">Anzahlung</span>
+                  <p className="mt-3 flex items-baseline gap-2 font-bold tracking-[-1.8px] sm:mt-[18px] sm:tracking-[-2.5px]">
+                    <span className="text-sm font-medium tracking-normal text-muted-foreground sm:text-[17px]">
+                      {v.founding.pricePrefix}
+                    </span>
+                    <span className="text-[46px] leading-none sm:text-[64px]">{v.founding.price}</span>
                   </p>
+                  <p className="pt-2 text-sm text-muted-foreground sm:text-[15px]">{v.founding.priceUnit}</p>
                   <p className="pt-2.5 text-[13px] leading-[1.45] text-muted-foreground sm:pt-3.5 sm:text-[15px] sm:leading-[1.5]">
-                    Wird voll auf den Preis angerechnet. Rückerstattbar, solange die Interviews nicht begonnen haben.
+                    {v.founding.deposit}
                   </p>
                   <div className="hidden flex-col gap-2.5 pt-7 md:flex">
                     <Button asChild size="xl" className="w-full">

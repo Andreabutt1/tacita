@@ -23,13 +23,22 @@ export interface LandingContent {
     tags: { label: string; tags: string[] };
     status: { label: string; text: string };
   };
-  heroBullets: { title: string; text: string }[];
-  trades?: { label: string; items: string[] };
+  heroProof: string[];
+  trades?: string[];
   problem: { title: string; subtitle: string; points: Stat[] };
   video: { pill: string; title: string; text: string; cardLabel: string; cardText: string };
   dossier: { eyebrow: string; title: string; points: string[] };
   memory: { eyebrow: string; title: string; points: string[] };
-  founding: { pill: string; title: string; subtitle: string; badge: string };
+  founding: {
+    pill: string;
+    title: string;
+    subtitle: string;
+    badge: string;
+    pricePrefix: string;
+    price: string;
+    priceUnit: string;
+    deposit: string;
+  };
   faq: { q: string; a: string }[];
   closing: { title: string; subtitle: string };
 }
@@ -62,28 +71,25 @@ export const steps = [
   },
 ];
 
-export const audiences = [
+// One offer, one price (see founding). These cards only show the three ways a hand-over happens.
+export const handoverCases = [
   {
-    eyebrow: "Betriebsübergabe",
-    title: "Inhaber:innen",
-    text: "Werkstätten, Handwerk, Gastronomie: Übergeben Sie einen Betrieb, der ohne Sie funktioniert.",
-    prefix: "ab",
-    price: "2.490 €",
-    unit: "pro Übergabe",
+    eyebrow: "Verkauf",
+    title: "Verkauf an Dritte",
+    text: "Käufer, Bank und Steuerberatung sehen im Dossier, dass der Betrieb ohne Sie läuft. Das stützt den Preis.",
+    focus: "Kunden, Lieferanten, Kalkulation",
   },
   {
-    eyebrow: "Pensionierung",
-    title: "HR & Qualität",
-    text: "Instandhaltung, Versorger, Fertigung: Sichern Sie das Wissen langjähriger Fachkräfte.",
-    price: "3.900 €",
-    unit: "pro Person",
+    eyebrow: "Familie",
+    title: "Übergabe in der Familie",
+    text: "Die nächste Generation kennt den Betrieb, aber nicht jede Absprache. Das Archiv ersetzt das ständige Nachfragen.",
+    focus: "Absprachen, Eigenheiten, Ansprechpartner",
   },
   {
-    eyebrow: "Karenz",
-    title: "Schlüsselrollen",
-    text: "Damit die Vertretung vom ersten Tag an weiß, was zu tun ist.",
-    price: "1.490 €",
-    unit: "pro Person",
+    eyebrow: "Team",
+    title: "Übergabe im Team",
+    text: "Wenn der Meister oder die Büroleitung übernimmt, steht alles an einem Ort, was bisher nur über Ihren Schreibtisch lief.",
+    focus: "Büro, Behörden, Bank, Verträge",
   },
 ];
 
@@ -111,7 +117,7 @@ export const trustPoints = [
 ];
 
 export const foundingIncludes = [
-  "Fester Preis für Ihren Fall",
+  "Jedes Gespräch auf Ihren Betrieb vorbereitet",
   "Persönliche Begleitung durch das Team",
   "Start der Interviews innerhalb von 2 Wochen",
   "Übergabe-Dossier und Archiv",
@@ -147,15 +153,8 @@ export const content: LandingContent = {
     tags: { label: "Ins Dossier übernommen", tags: ["Kunde Huber", "Ansprechpartner", "Lieferfenster"] },
     status: { label: "Fortschritt", text: "38 von 52 Themen erfasst · noch ca. 4 Anrufe" },
   },
-  heroBullets: [
-    { title: "Nur telefonieren", text: "8–15 Anrufe à 15 Min., keine App" },
-    { title: "Fragt nach echten Fällen", text: "nicht nach Theorie oder Formularen" },
-    { title: "Dossier für den Verkauf", text: "für Käufer, Bank und Steuerberatung" },
-  ],
-  trades: {
-    label: "Gemacht für Betriebe, in denen das Wissen in Köpfen steckt",
-    items: ["Kfz-Werkstätten", "Tischlereien", "Installateure", "Gastronomie", "Instandhaltung", "Versorger", "Fertigung"],
-  },
+  heroProof: ["Nur telefonieren, keine App", "Echte Fälle statt Formulare", "Dossier für Käufer und Bank"],
+  trades: ["Kfz-Werkstätten", "Installateure", "Tischlereien", "Gastronomie", "Fachhandel"],
   problem: {
     title: "Das wichtigste Wissen Ihres Betriebs steht nirgends.",
     subtitle: "Es steckt in Ihrem Kopf. Und genau das drückt den Preis, wenn Sie übergeben.",
@@ -199,6 +198,10 @@ export const content: LandingContent = {
     title: "Sichern Sie Ihren Platz für die Übergabe",
     subtitle: "Persönliche Begleitung vom Erstgespräch bis zum fertigen Dossier. Die Interviews starten innerhalb von 2 Wochen.",
     badge: "Begrenzte Plätze pro Monat",
+    pricePrefix: "ab",
+    price: "2.490 €",
+    priceUnit: "pro Übergabe, fester Preis nach dem Erstgespräch",
+    deposit: "490 € Anzahlung sichern Ihren Platz. Voll angerechnet, rückerstattbar, solange die Interviews nicht begonnen haben.",
   },
   faq: [
     whoInterviews,
@@ -209,6 +212,10 @@ export const content: LandingContent = {
     {
       q: "Brauche ich eine App oder einen Computer?",
       a: "Nein. Wir rufen Sie auf Ihrem normalen Telefon an. Das Dossier bekommen Sie als PDF, das Archiv öffnet Ihre Nachfolge im Browser.",
+    },
+    {
+      q: "Was kostet es?",
+      a: "Ab 2.490 € pro Übergabe, je nach Größe des Betriebs und Zahl der Gespräche. Nach dem Erstgespräch bekommen Sie einen festen Preis. Die Anzahlung von 490 € wird voll angerechnet.",
     },
     {
       q: "Gibt es Förderungen?",

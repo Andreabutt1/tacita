@@ -4,6 +4,22 @@ Overview of user-facing changes.
 
 ---
 
+## 2026-10-30
+
+### One offer, one price
+- „Für wen“ now shows the three ways a hand-over happens (sale, family, team) with what the dossier focuses on, instead of three audiences with three different prices
+- The price section states the price once: ab 2.490 € pro Übergabe, with the 490 € deposit explained underneath
+- New FAQ entry „Was kostet es?“
+
+### Calmer hero
+- The three bullet points under the email field are now one quiet line
+- The industries strip is shorter (Kfz-Werkstätten, Installateure, Tischlereien, Gastronomie, Fachhandel) and set in small capitals
+
+### Live on tacita.at
+- The page is published on Netlify; tacita.at points to it as soon as the registry activates the domain
+
+---
+
 ## 2026-10-28
 
 ### Tacita landing page
